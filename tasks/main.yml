@@ -1,0 +1,39 @@
+---
+- name: Donwload the Xonotic server package
+  get_url:
+    url: "http://dl.xonotic.org/xonotic-0.8.1.zip"
+    dest: /tmp/xonotic.zip
+
+- name: Extract the Xonotic archive
+  unarchive:
+    src: /tmp/xonotic.zip
+    dest: /home/tmolnar/stuff/others
+    owner: tmolnar
+    group: tmolnar
+    mode: u=rwx,g=rx,o=rx
+    creates: /home/tmolnar/stuff/others/Xonotic
+
+- name: Create the .xonotic directory
+  file:
+    name: /home/tmolnar/.xonotic
+    state: directory
+    owner: tmolnar
+    group: tmolnar
+    mode: u=rwx,g=rx,o=rx
+
+- name: Create the .xonotic/data directory
+  file:
+    name: /home/tmolnar/.xonotic/data
+    state: directory
+    owner: tmolnar
+    group: tmolnar
+    mode: u=rwx,g=rx,o=rx
+
+- name: Set up the Xonotic dedicated server
+  file:
+    src: server.cfg
+    dest: /home/tmolnar/.xonotic/data/server.cfg
+    state: file
+    owner: tmolnar
+    group: tmolnar
+    mode: 0644
