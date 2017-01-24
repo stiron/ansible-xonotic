@@ -2,6 +2,7 @@ Ubuntu16:
   image: "ubuntu:16.04"
   before_script:
     - apt-get update && apt-get -y install ansible openssh-server git
+    - useradd tmolnar
   script:
     - ansible-playbook --syntax-check -i tests/inventory tests/test.yml
     - ansible-playbook -i tests/inventory tests/test.yml --connection=local -u root --become-user=root
