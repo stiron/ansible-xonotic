@@ -1,7 +1,7 @@
 Ubuntu16:
   image: "ubuntu:16.04"
   before_script:
-    - apt-get update && apt-get -y install ansible openssh-server git
+    - apt-get update && apt-get -y install ansible openssh-server git zip
     - useradd tmolnar
     - mkdir -p /home/tmolnar/stuff/others
     - chown -R tmolnar:tmolnar /home/tmolnar/stuff
