@@ -30,10 +30,9 @@
     mode: u=rwx,g=rx,o=rx
 
 - name: Set up the Xonotic dedicated server
-  file:
+  copy:
     src: server.cfg
     dest: /home/tmolnar/.xonotic/data/server.cfg
-    state: file
     owner: tmolnar
     group: tmolnar
     mode: 0644
