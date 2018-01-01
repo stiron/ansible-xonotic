@@ -1,38 +1,46 @@
 ---
 - name: Donwload the Xonotic server package
   get_url:
-    url: "http://dl.xonotic.org/xonotic-0.8.1.zip"
-    dest: /tmp/xonotic.zip
+    url: "{{ xonotic_dl_url }}"
+    dest: "{{ xonotic_dl_path }}"
+
+- name: Create the extraction path
+  file:
+    dest: "{{ xonotic_extr_path }}"
+    state: directory
+    owner: "{{ xonotic_owner }}"
+    group: "{{ xonotic_group }}"
+    mode: "0755"
 
 - name: Extract the Xonotic archive
   unarchive:
-    src: /tmp/xonotic.zip
-    dest: /home/tmolnar/stuff/others
-    owner: tmolnar
-    group: tmolnar
-    mode: u=rwx,g=rx,o=rx
-    creates: /home/tmolnar/stuff/others/Xonotic
+    src: "{{ xonotic_dl_path }}"
+    dest: "{{ xonotic_extr_path }}"
+    owner: "{{ xonotic_owner }}"
+    group: "{{ xonotic_group }}"
+    mode: "0755"
+    creates: "{{ xonotic_extr_path }}/Xonotic"
 
 - name: Create the .xonotic directory
   file:
-    name: /home/tmolnar/.xonotic
+    name: /home/{{ xonotic_owner }}/.xonotic
     state: directory
-    owner: tmolnar
-    group: tmolnar
-    mode: u=rwx,g=rx,o=rx
+    owner: "{{ xonotic_owner }}"
+    group: "{{ xonotic_group }}"
+    mode: "0755"
 
 - name: Create the .xonotic/data directory
   file:
-    name: /home/tmolnar/.xonotic/data
+    name: /home/{{ xonotic_owner }}/.xonotic/data
     state: directory
-    owner: tmolnar
-    group: tmolnar
-    mode: u=rwx,g=rx,o=rx
+    owner: "{{ xonotic_owner }}"
+    group: "{{ xonotic_group }}"
+    mode: "0755"
 
-- name: Set up the Xonotic dedicated server
-  copy:
-    src: server.cfg
-    dest: /home/tmolnar/.xonotic/data/server.cfg
-    owner: tmolnar
-    group: tmolnar
-    mode: 0644
+- name: Set up the Xonotic dedicated server configuration
+  template:
+    src: server.cfg.j2
+    dest: /home/{{ xonotic_owner }}/.xonotic/data/server.cfg
+    owner: "{{ xonotic_owner }}"
+    group: "{{ xonotic_group }}"
+    mode: "0644"
