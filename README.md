@@ -4,7 +4,7 @@
 
 This module requires Ansible >=2.9 version.
 
-## Role variables
+## Mandatory role variables
 ```
 vars:
     # Client & Server
@@ -31,6 +31,18 @@ vars:
     - gametype: dm
 ```
 
+## Optional role variables
+```
+timelimit_override: -1
+fraglimit_override: -1
+capturelimit_override: -1
+g_domination_point_limit: -1
+g_keyhunt_point_limit: -1
+g_lms_lives_override: -1
+g_nexball_goallimit: -1
+g_ctf_ignore_frags: 1
+g_keyhunt_teams_override: -1
+```
 ## Examples
 
 ```

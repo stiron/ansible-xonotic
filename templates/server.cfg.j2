@@ -16,19 +16,16 @@ g_maplist_shuffle {{ g_maplist_shuffle }}
 g_maplist_mostrecent_count {{ g_maplist_mostrecent_count }}
 gametype {{ gametype }}
 
-// LIMITS: how long a match will last before the next map starts (-1 means use the map default, 0 = unlimited, please note that the variables fraglimit/timelimit can NOT be globally used for this but only DURING a match is being played)
-//timelimit_override -1	// global timelimit for all maps and gametypes
-//fraglimit_override -1	// global frag/point limit for all maps and gametypes
-//capturelimit_override -1	// capture limit for CTF
-//g_domination_point_limit -1	// frag/point limit for DOM
-//g_keyhunt_point_limit -1	// frag/point limit for KH
-//g_lms_lives_override -1	// lives for LMS
-//g_nexball_goallimit -1	// goals for NEXBALL
-
-//g_ctf_ignore_frags 1	// set to 1 to ignore kills except for FC kills
-
-// TEAMS for key hunt (change this to 2, 3, 4 to set a fixed keyhunt style)
-//g_keyhunt_teams_override -1	// teams for KH
+// Limits
+timelimit_override {{ timelimit_override }}
+fraglimit_override {{ fraglimit_override }}
+capturelimit_override {{ capturelimit_override }}
+g_domination_point_limit {{ g_domination_point_limit }}
+g_keyhunt_point_limit {{ g_keyhunt_point_limit }}
+g_lms_lives_override {{ g_lms_lives_override }}
+g_nexball_goallimit {{ g_nexball_goallimit }}
+g_ctf_ignore_frags {{ g_ctf_ignore_frags }}
+g_keyhunt_teams_override {{ g_keyhunt_teams_override }}
 
 /////////////////////////////////////////////////////////////////////
 // Some settings you MIGHT want to change.  Again IF so remove the //
