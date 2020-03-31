@@ -1,46 +1,56 @@
 ---
-- name: Donwload the Xonotic server package
-  get_url:
-    url: "{{ xonotic_dl_url }}"
-    dest: "{{ xonotic_dl_path }}"
+- name: Check for an existing installation
+  stat:
+    path: "{{ xonotic_binary }}"
+  changed_when: no
+  register: xonotic_path
 
-- name: Create the extraction path
-  file:
-    dest: "{{ xonotic_extr_path }}"
-    state: directory
-    owner: "{{ xonotic_owner }}"
-    group: "{{ xonotic_group }}"
-    mode: "0755"
+- when: not xonotic_path.stat.exists
+  block:
+    - name: Donwload the Xonotic package to {{ xonotic_dl_path }}
+      get_url:
+        url: "{{ xonotic_dl_url }}"
+        dest: "{{ xonotic_dl_path }}"
 
-- name: Extract the Xonotic archive
-  unarchive:
-    src: "{{ xonotic_dl_path }}"
-    dest: "{{ xonotic_extr_path }}"
-    owner: "{{ xonotic_owner }}"
-    group: "{{ xonotic_group }}"
-    mode: "0755"
-    creates: "{{ xonotic_extr_path }}/Xonotic"
+    - name: Create the {{ xonotic_extr_path }} extraction path
+      file:
+        dest: "{{ xonotic_extr_path }}"
+        state: directory
+        owner: "{{ xonotic_owner }}"
+        group: "{{ xonotic_group }}"
+        mode: "0755"
 
-- name: Create the .xonotic directory
-  file:
-    name: /home/{{ xonotic_owner }}/.xonotic
-    state: directory
-    owner: "{{ xonotic_owner }}"
-    group: "{{ xonotic_group }}"
-    mode: "0755"
+    - name: Extract the {{ xonotic_dl_path }} archive
+      unarchive:
+        src: "{{ xonotic_dl_path }}"
+        dest: "{{ xonotic_extr_path }}"
+        owner: "{{ xonotic_owner }}"
+        group: "{{ xonotic_group }}"
+        mode: "0755"
+        creates: "{{ xonotic_extr_path }}/Xonotic"
+  always:
+    - name: Delete the archive
+      file:
+        path: "{{ xonotic_dl_path }}"
+        state: absent
 
-- name: Create the .xonotic/data directory
-  file:
-    name: /home/{{ xonotic_owner }}/.xonotic/data
-    state: directory
-    owner: "{{ xonotic_owner }}"
-    group: "{{ xonotic_group }}"
-    mode: "0755"
-
-- name: Set up the Xonotic dedicated server configuration
-  template:
-    src: server.cfg.j2
-    dest: /home/{{ xonotic_owner }}/.xonotic/data/server.cfg
-    owner: "{{ xonotic_owner }}"
-    group: "{{ xonotic_group }}"
-    mode: "0644"
+- when: xonotic_server
+  block:
+    - name: Create the configuration directories
+      file:
+        name: "{{ item }}"
+        state: directory
+        owner: "{{ xonotic_owner }}"
+        group: "{{ xonotic_group }}"
+        mode: "0755"
+      loop:
+        - /home/{{ xonotic_owner }}/.xonotic
+        - /home/{{ xonotic_owner }}/.xonotic/data
+        
+    - name: Set up the Xonotic dedicated server configuration
+      template:
+        src: server.cfg.j2
+        dest: /home/{{ xonotic_owner }}/.xonotic/data/server.cfg
+        owner: "{{ xonotic_owner }}"
+        group: "{{ xonotic_group }}"
+        mode: "0644"
